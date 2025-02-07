@@ -34,36 +34,33 @@ class DriverClass {
 
 class Solution {
     // Function to detect cycle in a directed graph.
-    public boolean isCyclic(int v, ArrayList<ArrayList<Integer>> adj) {
+    public boolean isCyclic(int V, ArrayList<ArrayList<Integer>> adj) {
         // code here
-        boolean[] pathVisited = new boolean[v];
-        boolean[] visited = new boolean[v];
         
-        for(int i =0; i< v; i++){
-            if(dfs(adj, i, pathVisited, visited)){
-                return true;
+        int[] indegree = new int[V];
+        for(int i = 0; i < V; i++){
+            for(int neigh: adj.get(i))
+                indegree[neigh]++;
+                
+        }
+        Queue<Integer> q = new LinkedList<>();
+        for(int i =0; i < V; i++){
+            if(indegree[i] == 0)
+                q.add(i);
+                
+        }
+        
+        while(!q.isEmpty()){
+            int vertex = q.remove();
+            for(int neigh: adj.get(vertex)){
+                indegree[neigh]--;
+                if(indegree[neigh] == 0)
+                    q.add(neigh);
             }
         }
         
-        return false;
-    }
-    
-    
-    private boolean dfs(ArrayList<ArrayList<Integer>> adj, int source,boolean[] pathVisited, boolean[] visited){
-        visited[source] = true;
-        pathVisited[source] = true;
-        for(int neigh : adj.get(source)){
-            if(pathVisited[neigh])  
-                return true;
-            else if(!visited[neigh]){
-                if(dfs(adj, neigh, pathVisited, visited)){
-                    return true;
-                }
-            }
-        }
-        
-        pathVisited[source] = false;
-        
+        for(int i =0; i < V; i++)
+            if(indegree[i] != 0) return true;
         return false;
     }
 }

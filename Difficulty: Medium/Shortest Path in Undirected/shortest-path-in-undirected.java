@@ -41,25 +41,26 @@ class GFG {
 
 
 
-
-
 class Solution {
     // Function to find the shortest path from a source node to all other nodes
     public int[] shortestPath(ArrayList<ArrayList<Integer>> adj, int src) {
         // code here
-        int n = adj.size();
         
+        int n = adj.size();
         int[] distance = new int[n];
         Arrays.fill(distance, Integer.MAX_VALUE);
+        
         distance[src] = 0;
         Queue<Integer> q = new LinkedList<>();
+        
         q.add(src);
         while(!q.isEmpty()){
-            int current = q.remove();
-            for(int neigh: adj.get(current)){
-                if(distance[current] + 1 < distance[neigh]){
-                    distance[neigh] = 1 + distance[current];
+            int node = q.remove();
+            
+            for(int neigh: adj.get(node)){
+                if(1 + distance[node] < distance[neigh]){
                     q.add(neigh);
+                    distance[neigh] = 1+ distance[node];
                 }
             }
         }
@@ -68,6 +69,8 @@ class Solution {
             if(distance[i] == Integer.MAX_VALUE)
                 distance[i] = -1;
         }
+        
         return distance;
+        
     }
 }
